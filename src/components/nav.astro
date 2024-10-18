@@ -1,6 +1,6 @@
 ---
 import Logo from './logo.astro'
-const week = 'this'
+const { week } = Astro.props
 const weeks = ['last', 'this', 'next']
 
 const currentWeekCSS = (item: string, currentWeek: string) =>
@@ -17,41 +17,10 @@ const baseLinkStyles =
     <div class="relative flex h-16 items-center justify-between">
       <div class="flex flex-1 items-center justify-start">
         <div class="flex flex-shrink-0 items-center">
-          <div class="w-40">
-            <Logo />
-          </div>
+          <Logo />
+        </div>
 
-          <nav class="hidden md:ml-6 md:block">
-            <ul class="flex space-x-4">
-              {
-                weeks.map((i) => (
-                  <li>
-                    <a
-                      href={`/${i}-week`}
-                      class={`${baseLinkStyles} ${currentWeekCSS(i, week)}`}
-                    >
-                      {i} week
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </nav>
-        </div>
-        <div class="flex items-center">
-          <div class="flex-shrink-0">
-            <h1 class="font-montserrat font-light text-sky-100">
-              {`Comic releases for ${week} week`}
-            </h1>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <nav class="bg-sky-800">
-    <div class="mx-auto max-w-7xl px-2 py-2 sm:px-6 md:hidden lg:px-8">
-      <div class="relative flex h-16 items-center justify-between">
-        <div class="flex flex-1 items-center justify-center">
+        <nav class="hidden md:ml-6 md:block">
           <ul class="flex space-x-4">
             {
               weeks.map((i) => (
@@ -66,8 +35,37 @@ const baseLinkStyles =
               ))
             }
           </ul>
+        </nav>
+      </div>
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <h1 class="font-montserrat font-light text-sky-100">
+            {`Comic releases for ${week}`}
+          </h1>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
 </header>
+<nav class="bg-sky-800">
+  <div class="mx-auto max-w-7xl px-2 py-2 sm:px-6 md:hidden lg:px-8">
+    <div class="relative flex h-16 items-center justify-between">
+      <div class="flex flex-1 items-center justify-center">
+        <ul class="flex space-x-4">
+          {
+            weeks.map((i) => (
+              <li>
+                <a
+                  href={`/${i}-week`}
+                  class={`${baseLinkStyles} ${currentWeekCSS(i, week)}`}
+                >
+                  {i} week
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

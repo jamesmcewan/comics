@@ -1,0 +1,31 @@
+---
+import { ViewTransitions } from 'astro:transitions'
+import Footer from '../components/footer.astro'
+import Nav from '../components/nav.astro'
+import Comics from '../components/comics.astro'
+import { getComics } from '../data/get-comics'
+
+const { week } = Astro.props
+
+const comics = await getComics(week)
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <title>Comics</title>
+    <ViewTransitions />
+  </head>
+  <body>
+    <Nav {week} />
+    <Comics {comics} />
+    <Footer />
+  </body>
+</html>

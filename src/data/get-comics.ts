@@ -1,11 +1,11 @@
-export async function getComics() {
+export async function getComics(week: string) {
   const username = import.meta.env.USERNAME || process.env.USERNAME
   const password = import.meta.env.PASSWORD || process.env.PASSWORD
   const base64Credentials = btoa(`${username}:${password}`)
 
   try {
     const newComics = await fetch(
-      'https://metron.cloud/api/issue/?store_date=2024-10-16',
+      `https://metron.cloud/api/issue/?store_date=${week}`,
       {
         method: 'GET',
         headers: {
