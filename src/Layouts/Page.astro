@@ -23,7 +23,7 @@ const comics = await getComics(week)
     <title>Comics</title>
     <ViewTransitions />
   </head>
-  <body>
+  <body class="w-screen">
     <Nav {week} {weekType} />
     <Comics {comics} />
     <Footer />
