@@ -1,7 +1,10 @@
 ---
 import Logo from './logo.astro'
-const { week } = Astro.props
-const weeks = ['last', 'this', 'next']
+import { formatDate } from '../data/format-date'
+import { sortDates } from '../data/sort-dates'
+import { getNewComicBookDay } from '../data/get-new-comic-book-day'
+const { week, weekType } = Astro.props
+const weeks = getNewComicBookDay()
 
 const currentWeekCSS = (item: string, currentWeek: string) =>
   item === currentWeek
@@ -23,13 +26,13 @@ const baseLinkStyles =
         <nav class="hidden md:ml-6 md:block">
           <ul class="flex space-x-4">
             {
-              weeks.map((i) => (
+              sortDates(Object.values(weeks)).map((i) => (
                 <li>
                   <a
-                    href={`/${i}-week`}
+                    href={`/${i}`}
                     class={`${baseLinkStyles} ${currentWeekCSS(i, week)}`}
                   >
-                    {i} week
+                    {formatDate(i)}
                   </a>
                 </li>
               ))
@@ -40,7 +43,7 @@ const baseLinkStyles =
       <div class="flex items-center">
         <div class="flex-shrink-0">
           <h1 class="font-montserrat font-light text-sky-100">
-            {`Comic releases for ${week}`}
+            {`Comic releases for ${formatDate(week)}`}
           </h1>
         </div>
       </div>
@@ -53,13 +56,13 @@ const baseLinkStyles =
       <div class="flex flex-1 items-center justify-center">
         <ul class="flex space-x-4">
           {
-            weeks.map((i) => (
+            sortDates(Object.values(weeks)).map((i) => (
               <li>
                 <a
                   href={`/${i}-week`}
                   class={`${baseLinkStyles} ${currentWeekCSS(i, week)}`}
                 >
-                  {i} week
+                  {formatDate(i)}
                 </a>
               </li>
             ))
