@@ -3,7 +3,7 @@ import Logo from './logo.astro'
 import { formatDate } from '../data/format-date'
 import { sortDates } from '../data/sort-dates'
 import { getNewComicBookDay } from '../data/get-new-comic-book-day'
-const { week, weekType } = Astro.props
+const { week } = Astro.props
 const weeks = getNewComicBookDay()
 
 const currentWeekCSS = (item: string, currentWeek: string) =>
@@ -40,7 +40,7 @@ const baseLinkStyles =
           </ul>
         </nav>
       </div>
-      <div class="hidden lg:flex items-center">
+      <div class="hidden items-center lg:flex">
         <div class="flex-shrink-0">
           <h1 class="font-montserrat font-light text-sky-100">
             {`Comic releases for ${formatDate(week)}`}

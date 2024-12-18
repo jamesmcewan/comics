@@ -4,7 +4,7 @@ export async function getComics(week: string) {
   const base64Credentials = btoa(`${username}:${password}`)
 
   try {
-    const newComics = await fetch(
+    const response = await fetch(
       `https://metron.cloud/api/issue/?store_date=${week}`,
       {
         method: 'GET',
@@ -14,8 +14,14 @@ export async function getComics(week: string) {
         },
       },
     )
-    return await newComics.json()
-  } catch {
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok')
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Fetch error:', error)
     return {}
   }
 }

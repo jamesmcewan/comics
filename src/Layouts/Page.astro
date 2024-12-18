@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import Footer from '../components/footer.astro'
 import Nav from '../components/nav.astro'
 import Comics from '../components/comics.astro'
@@ -21,10 +21,10 @@ const comics = await getComics(week)
       rel="stylesheet"
     />
     <title>Comics</title>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class="w-screen bg-sky-700">
-    <Nav {week} {weekType} />
+    <Nav {week} />
     <Comics {comics} />
     <Footer />
   </body>

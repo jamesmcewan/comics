@@ -1,5 +1,9 @@
 ---
 const { comics } = Astro.props
+type Comic = {
+  image: string
+  issue: string
+}
 ---
 
 <div class="bg-slate-900">
@@ -9,28 +13,26 @@ const { comics } = Astro.props
       class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
     >
       {
-        comics &&
-          comics.results &&
-          comics.results.map((comic) => (
-            <li class="col-span-1 flex flex-col divide-y divide-slate-400 rounded-lg bg-slate-200 shadow">
-              <div>
-                <img
-                  class="rounded-md"
-                  src={comic.image}
-                  width="560"
-                  height="850"
-                  alt={`Cover for ${comic.issue}`}
-                />
-                <div class="px-5 py-5">
-                  <div>
-                    <h2 class="mb-3 font-montserrat text-lg font-medium text-stone-800">
-                      {comic.issue}
-                    </h2>
-                  </div>
+        comics?.results?.map((comic: Comic) => (
+          <li class="col-span-1 flex flex-col divide-y divide-slate-400 rounded-lg bg-slate-200 shadow">
+            <div>
+              <img
+                class="rounded-md"
+                src={comic.image}
+                width="560"
+                height="850"
+                alt={`Cover for ${comic.issue}`}
+              />
+              <div class="px-5 py-5">
+                <div>
+                  <h2 class="mb-3 font-montserrat text-lg font-medium text-stone-800">
+                    {comic.issue}
+                  </h2>
                 </div>
               </div>
-            </li>
-          ))
+            </div>
+          </li>
+        ))
       }
     </ul>
   </main>
