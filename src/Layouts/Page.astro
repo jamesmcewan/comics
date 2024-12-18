@@ -5,7 +5,7 @@ import Nav from '../components/nav.astro'
 import Comics from '../components/comics.astro'
 import { getComics } from '../data/get-comics'
 
-const { week, weekType } = Astro.props
+const { week } = Astro.props
 
 const comics = await getComics(week)
 ---
