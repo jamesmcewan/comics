@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/netlify": "^6.1.0",
     "@astrojs/tailwind": "5.1.5",
+    "@astrojs/vercel": "^8.0.4",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@tailwindcss/typography": "^0.5.16",
