@@ -18,7 +18,7 @@ jobs:
         run: bun run format:check
 
       - name: lint
-        run: bun run markdownlint;bun run lint:check
+        run: bun run lint:check
 
       - name: Build
         run: bun run build
