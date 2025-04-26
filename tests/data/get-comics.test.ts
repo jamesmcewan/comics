@@ -18,7 +18,7 @@ describe('getComics', () => {
 
   // Setup fetch mock for each test
   beforeEach(() => {
-    global.fetch = vi.fn()
+    global.fetch = vi.fn() as unknown as typeof fetch
   })
 
   // Reset mocks after tests
@@ -43,7 +43,7 @@ describe('getComics', () => {
     // Mock fetch to return a failed response and throw an error when used
     global.fetch = vi.fn().mockImplementation(() => {
       throw new Error('Network response was not ok')
-    })
+    }) as unknown as typeof fetch
 
     // When we pass an invalid week parameter
     const result = await getComics('invalid-date')
