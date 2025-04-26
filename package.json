@@ -16,8 +16,7 @@
     "update-dependencies": "bunx @astrojs/upgrade;bun update",
     "prepare": "husky",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:watch": "vitest"
   },
   "lint-staged": {
     "*.{md,html,json}": [
