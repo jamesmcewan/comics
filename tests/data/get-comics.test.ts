@@ -1,4 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest'
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} from 'vitest'
 import { getComics } from '../../src/data/get-comics'
 
 describe('getComics', () => {
@@ -25,11 +34,11 @@ describe('getComics', () => {
   it('has the correct function signature', () => {
     // Check that getComics is a function
     expect(typeof getComics).toBe('function')
-    
+
     // Check that it accepts a parameter
     expect(getComics.length).toBe(1)
   })
-  
+
   it('handles invalid week parameter', async () => {
     // Mock fetch to return a failed response and throw an error when used
     global.fetch = vi.fn().mockImplementation(() => {
@@ -38,13 +47,13 @@ describe('getComics', () => {
 
     // When we pass an invalid week parameter
     const result = await getComics('invalid-date')
-    
+
     // The function should handle the error and return an empty object
     expect(result).toEqual({})
-    
+
     // Verify fetch was called
     expect(global.fetch).toHaveBeenCalled()
-    
+
     // Verify console.error was called
     expect(console.error).toHaveBeenCalled()
   })
