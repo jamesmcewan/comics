@@ -1,10 +1,27 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest'
 import { getComics } from '../../src/data/get-comics'
 
-// For this test, we'll use a more integration-focused approach
-// since mocking fetch and environment variables is complex with the current setup
 describe('getComics', () => {
-  // Skip these tests in CI environments
+  // Mock console.error to prevent error output during tests
+  beforeAll(() => {
+    console.error = vi.fn()
+  })
+
+  // Setup fetch mock for each test
+  beforeEach(() => {
+    global.fetch = vi.fn()
+  })
+
+  // Reset mocks after tests
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  // Restore console after all tests
+  afterAll(() => {
+    vi.restoreAllMocks()
+  })
+
   it('has the correct function signature', () => {
     // Check that getComics is a function
     expect(typeof getComics).toBe('function')
@@ -14,12 +31,21 @@ describe('getComics', () => {
   })
   
   it('handles invalid week parameter', async () => {
-    // When we pass an invalid week parameter (without env variables set)
-    // the function should handle the error and return an empty object
+    // Mock fetch to return a failed response and throw an error when used
+    global.fetch = vi.fn().mockImplementation(() => {
+      throw new Error('Network response was not ok')
+    })
+
+    // When we pass an invalid week parameter
     const result = await getComics('invalid-date')
     
-    // Since we don't expect valid credentials in the test environment,
-    // we're testing that the function handles errors gracefully
+    // The function should handle the error and return an empty object
     expect(result).toEqual({})
+    
+    // Verify fetch was called
+    expect(global.fetch).toHaveBeenCalled()
+    
+    // Verify console.error was called
+    expect(console.error).toHaveBeenCalled()
   })
 })
