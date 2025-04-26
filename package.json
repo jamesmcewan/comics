@@ -13,9 +13,11 @@
     "format:check": "prettier --check . ",
     "lint-staged": "lint-staged",
     "astro": "astro",
-<<<<<<< Updated upstream
     "update-dependencies": "bunx @astrojs/upgrade;bun update",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "lint-staged": {
     "*.{md,html,json}": [
@@ -26,14 +28,6 @@
       "oxlint --fix",
       "prettier --plugin=prettier-plugin-astro --write"
     ]
-||||||| Stash base
-    "update-dependencies": "bunx @astrojs/upgrade;bun update"
-=======
-    "update-dependencies": "bunx @astrojs/upgrade;bun update",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
->>>>>>> Stashed changes
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -50,21 +44,13 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/bun": "^1.2.9",
-<<<<<<< Updated upstream
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "oxlint": "^0.16.7",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.6.11"
-||||||| Stash base
-    "@types/eslint": "^9.6.1",
-    "@types/eslint__eslintrc": "^2.1.2"
-=======
-    "@types/eslint": "^9.6.1",
-    "@types/eslint__eslintrc": "^2.1.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "jsdom": "^26.1.0",
     "vitest": "^3.1.2"
->>>>>>> Stashed changes
   }
 }
