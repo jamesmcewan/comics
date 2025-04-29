@@ -1,0 +1,107 @@
+---
+import Creators from './creators.astro'
+
+export interface Props {
+  comic: any
+}
+
+const { comic } = Astro.props
+---
+
+<div class="overflow-hidden rounded-lg bg-slate-200 shadow-lg">
+  <div class="md:flex">
+    <div class="p-8 md:flex-shrink-0">
+      <img
+        class="h-auto w-full rounded-lg md:w-96"
+        src={comic.image}
+        alt={`Cover for ${comic.issue}`}
+      />
+    </div>
+    <div class="p-8">
+      <h1 class="font-inter mb-4 text-2xl font-bold text-slate-900">
+        {comic.series.name} ({comic.series.year_began}) #{comic.number}
+      </h1>
+
+      {
+        comic.desc && (
+          <div class="mb-6">
+            <h2 class="font-inter mb-2 text-lg font-medium text-slate-800">
+              Summary
+            </h2>
+            <div
+              class="prose prose-sm max-w-none text-slate-700"
+              set:html={comic.desc}
+            />
+          </div>
+        )
+      }
+
+      {/* Credits section */}
+      <div class="mb-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
+          {
+            comic.series && (
+              <div>
+                <dt class="font-medium text-slate-700">Series</dt>
+                <dd class="text-slate-600">{comic.series.name}</dd>
+              </div>
+            )
+          }
+          {
+            comic.volume && (
+              <div>
+                <dt class="font-medium text-slate-700">Volume</dt>
+                <dd class="text-slate-600">{comic.volume}</dd>
+              </div>
+            )
+          }
+          {
+            comic.cover_date && (
+              <div>
+                <dt class="font-medium text-slate-700">Cover Date</dt>
+                <dd class="text-slate-600">{comic.cover_date}</dd>
+              </div>
+            )
+          }
+          {
+            comic.store_date && (
+              <div>
+                <dt class="font-medium text-slate-700">Store Date</dt>
+                <dd class="text-slate-600">{comic.store_date}</dd>
+              </div>
+            )
+          }
+          {
+            comic.price && (
+              <div>
+                <dt class="font-medium text-slate-700">Price</dt>
+                <dd class="text-slate-600">${comic.price}</dd>
+              </div>
+            )
+          }
+          {
+            comic.sku && (
+              <div>
+                <dt class="font-medium text-slate-700">SKU</dt>
+                <dd class="text-slate-600">{comic.sku}</dd>
+              </div>
+            )
+          }
+          {
+            comic.publisher && (
+              <div>
+                <dt class="font-medium text-slate-700">Publisher</dt>
+                <dd class="text-slate-600">{comic.publisher.name}</dd>
+              </div>
+            )
+          }
+        </dl>
+      </div>
+      {
+        comic.credits && comic.credits.length > 0 && (
+          <Creators creators={comic.credits} />
+        )
+      }
+    </div>
+  </div>
+</div>

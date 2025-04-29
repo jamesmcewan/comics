@@ -1,0 +1,15 @@
+---
+import Head from '../components/head-meta.astro'
+import Body from '../components/body.astro'
+
+const { week } = Astro.props
+---
+
+<html lang="en">
+  <Head />
+  <Body {week}>
+    <div class="bg-slate-900">
+      <slot />
+    </div>
+  </Body>
+</html>

@@ -1,0 +1,12 @@
+---
+import Nav from './nav.astro'
+import Footer from './footer.astro'
+
+const { week } = Astro.props
+---
+
+<body class="w-screen bg-sky-700">
+  <Nav {week} />
+  <slot />
+  <Footer />
+</body>

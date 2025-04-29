@@ -1,8 +1,8 @@
 ---
-import Page from '../Layouts/Page.astro'
+import Week from '../Layouts/week.astro'
 import { getNewComicBookDay } from '../data/get-new-comic-book-day'
 
 const { currentWeek } = getNewComicBookDay()
 ---
 
-<Page week={currentWeek} />
+<Week week={currentWeek} />
