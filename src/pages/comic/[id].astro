@@ -2,9 +2,6 @@
 import Details from '../../Layouts/details.astro'
 import { getComicDetails } from '../../data/get-comic-details'
 import ComicDetails from '../../components/comic-details.astro'
-import { getNewComicBookDay } from '../../data/get-new-comic-book-day'
-
-const { currentWeek } = getNewComicBookDay()
 
 const { id } = Astro.params
 const comicDetails = await getComicDetails(id as string)

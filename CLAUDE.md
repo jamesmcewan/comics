@@ -2,25 +2,32 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Build & Development Commands
+## Build & Development
 
-- `bun run dev` - Start development server
-- `bun run build` - Build production version (runs TypeScript check first)
-- `bun run preview` - Preview production build
-- `bun run lint:check` - Run oxlint to check code
-- `bun run lint:fix` - Run oxlint with auto-fix
-- `bun run format:write` - Format code with Prettier
-- `bun run format:check` - Check formatting with Prettier
+- Build: `bun run build`
+- Dev server: `bun run dev` or `bun run start`
+- Preview: `bun run preview`
 
-## Code Style Guidelines
+## Testing
 
-- **Formatting**: Use single quotes, no semicolons, trailing commas
-- **Framework**: Astro with TypeScript and Tailwind CSS
-- **Components**: Use `.astro` files for components with frontmatter (---) section for scripts
-- **Linting**: Use oxlint for linting checks
-- **Typing**: Follow TypeScript best practices with explicit types for component props
-- **Imports**: Group imports logically (Astro components first, then data utilities)
-- **Pre-commit Hook**: Uses lint-staged to enforce linting and formatting
-- **API Calls**: Use fetch with proper error handling and authentication
+- Run all tests: `bun run test`
+- Watch mode: `bun run test:watch`
+- Run single test: `bun run test -- -t 'test name'`
 
-Always run `bun run lint:fix` and `bun run format:write` before committing changes.
+## Code Quality
+
+- Lint check: `bun run lint:check`
+- Lint fix: `bun run lint:fix`
+- Format check: `bun run format:check`
+- Format write: `bun run format:write`
+
+## Code Style
+
+- TypeScript with strict types
+- No semicolons at line endings
+- Single quotes for strings
+- Trailing commas in multi-line objects/arrays
+- Function names use camelCase
+- Components use PascalCase
+- Error handling via explicit try/catch blocks
+- Import order: external libraries first, then internal modules

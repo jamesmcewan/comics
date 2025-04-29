@@ -20,6 +20,9 @@ jobs:
       - name: lint
         run: bun run lint:check
 
+      - name: test
+        run: bun run test
+
       - name: Build
         run: bun run build
   deploy:

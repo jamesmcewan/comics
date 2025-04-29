@@ -14,7 +14,9 @@
     "lint-staged": "lint-staged",
     "astro": "astro",
     "update-dependencies": "bunx @astrojs/upgrade;bun update",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "lint-staged": {
     "*.{md,html,json}": [
@@ -28,9 +30,9 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/node": "^9.2.0",
+    "@astrojs/node": "^9.2.1",
     "@tailwindcss/typography": "^0.5.16",
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.3",
     "astro": "5.7.4",
     "globals": "^15.15.0",
     "tailwindcss": "^4.1.4",
@@ -38,12 +40,16 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.4",
-    "@types/bun": "^1.2.9",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/bun": "^1.2.11",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
-    "oxlint": "^0.16.7",
+    "oxlint": "^0.16.8",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.6.11"
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "jsdom": "^26.1.0",
+    "vitest": "^3.1.2"
   }
 }
