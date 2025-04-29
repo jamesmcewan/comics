@@ -10,38 +10,18 @@ const { id } = Astro.params
 const comicDetails = await getComicDetails(id as string)
 ---
 
-<Details>
+<Details week={comicDetails.store_date}>
   <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-    {
-      !comicDetails || Object.keys(comicDetails).length === 0 ? (
-        <div class="rounded-lg bg-slate-200 p-8 text-center shadow-lg">
-          <h1 class="font-montserrat mb-4 text-2xl font-bold text-slate-900">
-            Comic Not Found
-          </h1>
-          <p class="mb-6 text-slate-700">
-            Sorry, we couldn't find details for this comic. It may have been
-            removed or the ID is incorrect.
-          </p>
-          <a
-            href={`/${currentWeek}`}
-            class="inline-block rounded-md bg-sky-700 px-4 py-2 text-white transition-colors hover:bg-sky-800"
-          >
-            Back to Comics List
-          </a>
-        </div>
-      ) : (
-        <div>
-          <ComicDetails comic={comicDetails} />
-          <div class="mt-6 text-center">
-            <a
-              href={`/${currentWeek}`}
-              class="inline-block rounded-md bg-sky-700 px-4 py-2 text-white transition-colors hover:bg-sky-800"
-            >
-              Back to Comics List
-            </a>
-          </div>
-        </div>
-      )
-    }
+    <div>
+      <ComicDetails comic={comicDetails} />
+      <div class="mt-6 text-center">
+        <a
+          href={`/${comicDetails.store_date}`}
+          class="inline-block rounded-md bg-sky-700 px-4 py-2 text-white transition-colors hover:bg-sky-800"
+        >
+          Back to Comics List
+        </a>
+      </div>
+    </div>
   </main>
 </Details>

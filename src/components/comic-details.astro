@@ -1,34 +1,35 @@
 ---
-// Component to display detailed information about a comic
+import Creators from './creators.astro'
+
 export interface Props {
-  comic: any // Using any type since we don't know the full structure from the API
+  comic: any
 }
 
 const { comic } = Astro.props
 ---
 
-<div class="bg-slate-200 rounded-lg shadow-lg overflow-hidden">
+<div class="overflow-hidden rounded-lg bg-slate-200 shadow-lg">
   <div class="md:flex">
-    <div class="md:flex-shrink-0">
+    <div class="p-8 md:flex-shrink-0">
       <img
-        class="h-auto w-full md:w-96 object-cover"
+        class="h-auto w-full rounded-lg md:w-96"
         src={comic.image}
         alt={`Cover for ${comic.issue}`}
       />
     </div>
     <div class="p-8">
-      <h1 class="text-2xl font-bold font-montserrat text-slate-900 mb-4">
-        {comic.issue}
+      <h1 class="font-inter mb-4 text-2xl font-bold text-slate-900">
+        {comic.series.name} ({comic.series.year_began}) #{comic.number}
       </h1>
 
       {
         comic.desc && (
           <div class="mb-6">
-            <h2 class="font-montserrat text-lg font-medium text-slate-800 mb-2">
+            <h2 class="font-inter mb-2 text-lg font-medium text-slate-800">
               Summary
             </h2>
             <div
-              class="text-slate-700 prose prose-sm max-w-none"
+              class="prose prose-sm max-w-none text-slate-700"
               set:html={comic.desc}
             />
           </div>
@@ -37,20 +38,7 @@ const { comic } = Astro.props
 
       {/* Credits section */}
       <div class="mb-6">
-        <h2 class="font-montserrat text-lg font-medium text-slate-800 mb-2">
-          Issue Details
-        </h2>
         <dl class="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2">
-          {
-            comic.characters && comic.characters.length > 0 && (
-              <div class="sm:col-span-2">
-                <dt class="font-medium text-slate-700">Characters</dt>
-                <dd class="text-slate-600">
-                  {comic.characters.map((c) => c.name).join(', ')}
-                </dd>
-              </div>
-            )
-          }
           {
             comic.series && (
               <div>
@@ -109,23 +97,9 @@ const { comic } = Astro.props
           }
         </dl>
       </div>
-
-      {/* Credits: Creators */}
       {
         comic.credits && comic.credits.length > 0 && (
-          <div class="mb-6">
-            <h2 class="font-montserrat text-lg font-medium text-slate-800 mb-2">
-              Creators
-            </h2>
-            <dl class="grid grid-cols-1 gap-x-4 gap-y-2">
-              {comic.credits.map((credit) => (
-                <div>
-                  <dt class="font-medium text-slate-700">{credit.role}</dt>
-                  <dd class="text-slate-600">{credit.creator?.name}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          <Creators creators={comic.credits} />
         )
       }
     </div>

@@ -1,0 +1,20 @@
+---
+import { sortCreators } from '../data/sort-creators'
+
+const { creators } = Astro.props
+const sortedCreators = sortCreators(creators)
+---
+
+<div class="mb-6">
+  <h2 class="font-inter mb-2 text-lg font-medium text-slate-800">Creators</h2>
+  <dl class="grid grid-cols-4 gap-x-4 gap-y-2">
+    {
+      sortedCreators.map((credit) => (
+        <div>
+          <dt class="font-medium text-slate-700">{credit.role}</dt>
+          <dd class="text-slate-600">{credit.name}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>
