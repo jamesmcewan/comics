@@ -1,0 +1,14 @@
+---
+import Head from '../components/head-meta.astro'
+import Body from '../components/body.astro'
+import { getNewComicBookDay } from '../data/get-new-comic-book-day'
+
+const { currentWeek } = getNewComicBookDay()
+---
+
+<html lang="en">
+  <Head />
+  <Body week={currentWeek}>
+    <slot />
+  </Body>
+</html>

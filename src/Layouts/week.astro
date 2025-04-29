@@ -1,0 +1,17 @@
+---
+import Head from '../components/head-meta.astro'
+import Body from '../components/body.astro'
+import Comics from '../components/comics.astro'
+import { getComics } from '../data/get-comics'
+
+const { week } = Astro.props
+
+const comics = await getComics(week as string)
+---
+
+<html lang="en">
+  <Head />
+  <Body {week}>
+    <Comics {comics} />
+  </Body>
+</html>
