@@ -37,7 +37,7 @@ describe('getComicDetails', () => {
 
   it('handles errors from getMetronData', async () => {
     const mockId = '12345'
-    
+
     // Set up the mock to throw an error
     vi.mocked(getMetronData).mockRejectedValue(new Error('API Error'))
 
@@ -46,7 +46,9 @@ describe('getComicDetails', () => {
     try {
       const result = await getComicDetails(mockId)
       // If we reach here, the function caught the error and returned something
-      expect(getMetronData).toHaveBeenCalledWith(`https://metron.cloud/api/issue/${mockId}/`)
+      expect(getMetronData).toHaveBeenCalledWith(
+        `https://metron.cloud/api/issue/${mockId}/`,
+      )
     } catch (error) {
       // If we catch an error here, verify it's the expected one
       expect(error.message).toBe('API Error')

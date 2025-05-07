@@ -52,8 +52,8 @@ describe('getComics', () => {
       count: 2,
       results: [
         { id: '12345', title: 'Test Comic 1', publisher: 'Test Publisher 1' },
-        { id: '67890', title: 'Test Comic 2', publisher: 'Test Publisher 2' }
-      ]
+        { id: '67890', title: 'Test Comic 2', publisher: 'Test Publisher 2' },
+      ],
     }
 
     // Set up the mock return value
@@ -72,14 +72,16 @@ describe('getComics', () => {
 
   it('handles errors from getMetronData', async () => {
     const mockWeek = '2024-09-04'
-    
+
     // Set up the mock to throw an error
     vi.mocked(getMetronData).mockRejectedValue(new Error('API Error'))
 
     try {
       const result = await getComics(mockWeek)
       // If we reach here, the function caught the error and returned something
-      expect(getMetronData).toHaveBeenCalledWith(`https://metron.cloud/api/issue/?store_date=${mockWeek}`)
+      expect(getMetronData).toHaveBeenCalledWith(
+        `https://metron.cloud/api/issue/?store_date=${mockWeek}`,
+      )
     } catch (error) {
       // If we catch an error here, verify it's the expected one
       expect(error.message).toBe('API Error')
@@ -111,6 +113,8 @@ describe('getComics', () => {
     expect(result).toEqual({})
 
     // Verify getMetronData was called with the correct endpoint
-    expect(getMetronData).toHaveBeenCalledWith('https://metron.cloud/api/issue/?store_date=invalid-date')
+    expect(getMetronData).toHaveBeenCalledWith(
+      'https://metron.cloud/api/issue/?store_date=invalid-date',
+    )
   })
 })
