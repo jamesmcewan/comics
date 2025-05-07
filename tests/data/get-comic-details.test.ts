@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { getComicDetails } from '../../src/data/get-comic-details'
 import { getMetronData } from '../../src/data/get-metron-data'
 
@@ -44,7 +44,7 @@ describe('getComicDetails', () => {
     // Since getComicDetails might have error handling, we should test the return value
     // rather than expecting it to throw
     try {
-      const result = await getComicDetails(mockId)
+      const _result = await getComicDetails(mockId)
       // If we reach here, the function caught the error and returned something
       expect(getMetronData).toHaveBeenCalledWith(
         `https://metron.cloud/api/issue/${mockId}/`,

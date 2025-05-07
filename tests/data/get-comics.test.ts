@@ -77,7 +77,7 @@ describe('getComics', () => {
     vi.mocked(getMetronData).mockRejectedValue(new Error('API Error'))
 
     try {
-      const result = await getComics(mockWeek)
+      const _result = await getComics(mockWeek)
       // If we reach here, the function caught the error and returned something
       expect(getMetronData).toHaveBeenCalledWith(
         `https://metron.cloud/api/issue/?store_date=${mockWeek}`,

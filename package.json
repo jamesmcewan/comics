@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
+    "quick-build": "astro build",
     "preview": "astro preview",
     "lint:check": "oxlint",
     "lint:fix": "oxlint --fix",
