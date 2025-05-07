@@ -1,8 +1,19 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { getNewComicBookDay } from '../../src/data/get-new-comic-book-day'
 
-// Since mocking dates is complex with the current setup, we'll test the basic functionality
 describe('getNewComicBookDay', () => {
+  // Store the original Date implementation
+  const OriginalDate = global.Date
+
+  beforeEach(() => {
+    vi.resetAllMocks()
+  })
+
+  afterEach(() => {
+    // Restore the original Date after each test
+    global.Date = OriginalDate
+  })
+
   it('returns an object with the expected properties', () => {
     const result = getNewComicBookDay()
 
@@ -41,5 +52,31 @@ describe('getNewComicBookDay', () => {
     expect(currentDate.getDay()).toBe(3) // 0 is Sunday, so 3 is Wednesday
     expect(nextDate.getDay()).toBe(3)
     expect(lastDate.getDay()).toBe(3)
+  })
+
+  it('handles date calculations consistently', () => {
+    // This test verifies the function returns dates that follow the expected pattern
+    // without attempting to mock the Date object, which is complex and brittle
+    
+    const result = getNewComicBookDay()
+    
+    // Parse the dates
+    const current = new Date(result.currentWeek)
+    const next = new Date(result.nextWeek)
+    const last = new Date(result.lastWeek)
+    
+    // Basic validation
+    expect(current instanceof Date).toBe(true)
+    expect(next instanceof Date).toBe(true)
+    expect(last instanceof Date).toBe(true)
+    
+    // Verify all dates are Wednesdays
+    expect(current.getDay()).toBe(3)
+    expect(next.getDay()).toBe(3)
+    expect(last.getDay()).toBe(3)
+    
+    // Verify the spacing between dates is exactly 7 days
+    expect(next.getTime() - current.getTime()).toBe(7 * 24 * 60 * 60 * 1000)
+    expect(current.getTime() - last.getTime()).toBe(7 * 24 * 60 * 60 * 1000)
   })
 })
