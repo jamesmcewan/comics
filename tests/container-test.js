@@ -1,6 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { expect, vi, afterEach } from 'vitest'
-import { TextEncoder, TextDecoder } from 'util'
+import { TextEncoder, TextDecoder } from 'node:util'
 
 // Set up globals for Node.js environment
 global.TextEncoder = TextEncoder
