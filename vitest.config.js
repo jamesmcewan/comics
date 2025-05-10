@@ -1,9 +1,13 @@
-import { defineConfig } from 'vitest/config'
+import { getViteConfig } from 'astro/config'
 
-export default defineConfig({
+export default getViteConfig({
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./tests/setup.js'],
+    deps: {
+      // Ensure Astro components can be imported in tests
+      inline: [/astro/],
+    },
   },
 })
