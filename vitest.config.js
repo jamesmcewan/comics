@@ -8,6 +8,11 @@ export default getViteConfig({
     deps: {
       // Ensure Astro components can be imported in tests
       inline: [/astro/],
+      optimizer: {
+        web: {
+          include: ['@astrojs/test-utils'],
+        },
+      },
     },
   },
 })
