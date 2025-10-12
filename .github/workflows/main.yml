@@ -1,6 +1,6 @@
 # See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
 
-name: Fly Deploy
+name: checks
 on:
   push:
     branches:
@@ -25,14 +25,3 @@ jobs:
 
       - name: Build
         run: bun run build
-  deploy:
-    name: Deploy app
-    needs: branch-checks
-    runs-on: ubuntu-latest
-    concurrency: deploy-group # optional: ensure only one action runs at a time
-    steps:
-      - uses: actions/checkout@v4
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
