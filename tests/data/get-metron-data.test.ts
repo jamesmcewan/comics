@@ -23,16 +23,9 @@ describe('getMetronData', () => {
     originalBtoa = globalThis.btoa
     globalThis.btoa = (str: string) => `mocked_base64_${str}`
 
-    // Mock fetch - create mock and assign it
+    // Mock fetch
     originalFetch = globalThis.fetch
-    fetchMock = mock(() =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        statusText: 'OK',
-        json: () => Promise.resolve({}),
-      } as Response),
-    )
+    fetchMock = mock()
     globalThis.fetch = fetchMock as any
   })
 
@@ -49,12 +42,14 @@ describe('getMetronData', () => {
   it('makes a request with the correct authorization header', async () => {
     const mockJson = mock(() => Promise.resolve({ data: 'test data' }))
 
-    fetchMock.mockResolvedValue({
-      ok: true,
-      status: 200,
-      statusText: 'OK',
-      json: mockJson,
-    } as Response)
+    fetchMock.mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        json: mockJson,
+      } as Response),
+    )
 
     const endpoint = 'https://api.example.com/comics'
     await getMetronData(endpoint)
@@ -73,23 +68,27 @@ describe('getMetronData', () => {
   it('returns the JSON response on successful request', async () => {
     const mockData = { data: 'test data' }
 
-    fetchMock.mockResolvedValue({
-      ok: true,
-      status: 200,
-      statusText: 'OK',
-      json: mock(() => Promise.resolve(mockData)),
-    } as Response)
+    fetchMock.mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        json: mock(() => Promise.resolve(mockData)),
+      } as Response),
+    )
 
     const result = await getMetronData('https://api.example.com/comics')
     expect(result).toEqual(mockData)
   })
 
   it('returns an empty object when the request fails', async () => {
-    fetchMock.mockResolvedValue({
-      ok: false,
-      status: 404,
-      statusText: 'Not Found',
-    } as Response)
+    fetchMock.mockImplementation(() =>
+      Promise.resolve({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      } as Response),
+    )
 
     const consoleSpy = spyOn(console, 'error').mockImplementation(() => {})
 
@@ -102,7 +101,9 @@ describe('getMetronData', () => {
   })
 
   it('handles network errors gracefully', async () => {
-    fetchMock.mockRejectedValue(new Error('Network error'))
+    fetchMock.mockImplementation(() =>
+      Promise.reject(new Error('Network error')),
+    )
 
     const consoleSpy = spyOn(console, 'error').mockImplementation(() => {})
 
