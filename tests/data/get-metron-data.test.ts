@@ -1,53 +1,56 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  mock,
+  spyOn,
+} from 'bun:test'
 import { getMetronData } from '../../src/data/get-metron-data'
 
-// Mock environment variables
-vi.stubEnv('M_USERNAME', 'test_username')
-vi.stubEnv('M_PASSWORD', 'test_password')
-
-// Mock btoa
-vi.stubGlobal('btoa', (str: string) => `mocked_base64_${str}`)
-
 describe('getMetronData', () => {
-  // Store original fetch
-  const originalFetch = global.fetch
+  let originalFetch: typeof globalThis.fetch
+  let originalBtoa: typeof globalThis.btoa
 
   beforeEach(() => {
-    // Reset mocks before each test
-    vi.resetAllMocks()
+    // Set environment variables
+    process.env.M_USERNAME = 'test_username'
+    process.env.M_PASSWORD = 'test_password'
 
-    // Replace global fetch with a mock
-    global.fetch = vi.fn() as unknown as typeof fetch
+    // Mock btoa
+    originalBtoa = globalThis.btoa
+    globalThis.btoa = (str: string) => `mocked_base64_${str}`
+
+    // Mock fetch
+    originalFetch = globalThis.fetch
+    globalThis.fetch = mock()
   })
 
   afterEach(() => {
-    // Restore global fetch
-    global.fetch = originalFetch
+    // Cleanup environment
+    delete process.env.M_USERNAME
+    delete process.env.M_PASSWORD
 
-    // Clear mocks
-    vi.clearAllMocks()
+    // Restore globals
+    globalThis.btoa = originalBtoa
+    globalThis.fetch = originalFetch
   })
 
   it('makes a request with the correct authorization header', async () => {
-    // Mock a successful response
-    const mockJson = vi.fn().mockResolvedValue({ data: 'test data' })
-    const mockResponse = {
+    const mockJson = mock(() => Promise.resolve({ data: 'test data' }))
+
+    globalThis.fetch.mockResolvedValue({
       ok: true,
       status: 200,
       statusText: 'OK',
       json: mockJson,
-    }
-
-    // Setup fetch mock
-    vi.mocked(global.fetch).mockResolvedValue(
-      mockResponse as unknown as Response,
-    )
+    } as Response)
 
     const endpoint = 'https://api.example.com/comics'
     await getMetronData(endpoint)
 
-    // Check if fetch was called with the correct arguments
-    expect(global.fetch).toHaveBeenCalledWith(endpoint, {
+    expect(globalThis.fetch).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -55,76 +58,50 @@ describe('getMetronData', () => {
       },
     })
 
-    // Check if the response.json method was called
     expect(mockJson).toHaveBeenCalled()
   })
 
   it('returns the JSON response on successful request', async () => {
     const mockData = { data: 'test data' }
 
-    // Mock a successful response
-    const mockResponse = {
+    globalThis.fetch.mockResolvedValue({
       ok: true,
       status: 200,
       statusText: 'OK',
-      json: vi.fn().mockResolvedValue(mockData),
-    }
-
-    // Setup fetch mock
-    vi.mocked(global.fetch).mockResolvedValue(
-      mockResponse as unknown as Response,
-    )
+      json: mock(() => Promise.resolve(mockData)),
+    } as Response)
 
     const result = await getMetronData('https://api.example.com/comics')
-
-    // Check if the result matches the mock data
     expect(result).toEqual(mockData)
   })
 
   it('returns an empty object when the request fails', async () => {
-    // Mock a failed response
-    const mockResponse = {
+    globalThis.fetch.mockResolvedValue({
       ok: false,
       status: 404,
       statusText: 'Not Found',
-    }
+    } as Response)
 
-    // Setup fetch mock
-    vi.mocked(global.fetch).mockResolvedValue(
-      mockResponse as unknown as Response,
-    )
-
-    // Mock console.error to avoid polluting test output
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleSpy = spyOn(console, 'error').mockImplementation(() => {})
 
     const result = await getMetronData('https://api.example.com/comics')
 
-    // Check if an empty object was returned
     expect(result).toEqual({})
-
-    // Check if the error was logged
     expect(consoleSpy).toHaveBeenCalled()
 
-    // Restore console.error
     consoleSpy.mockRestore()
   })
 
   it('handles network errors gracefully', async () => {
-    // Setup fetch mock to throw a network error
-    vi.mocked(global.fetch).mockRejectedValue(new Error('Network error'))
+    globalThis.fetch.mockRejectedValue(new Error('Network error'))
 
-    // Mock console.error to avoid polluting test output
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleSpy = spyOn(console, 'error').mockImplementation(() => {})
 
     const result = await getMetronData('https://api.example.com/comics')
 
-    // Check if an empty object was returned
     expect(result).toEqual({})
-
-    // Check if the error was logged
     expect(consoleSpy).toHaveBeenCalled()
 
-    // Restore console.error
     consoleSpy.mockRestore()
   })
 })

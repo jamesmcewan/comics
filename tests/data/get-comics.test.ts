@@ -2,39 +2,42 @@ import {
   describe,
   it,
   expect,
-  vi,
   beforeEach,
   afterEach,
   beforeAll,
   afterAll,
-} from 'vitest'
+  mock,
+  spyOn,
+} from 'bun:test'
 import { getComics } from '../../src/data/get-comics'
-import { getMetronData } from '../../src/data/get-metron-data'
 
-// Mock the getMetronData function
-vi.mock('../../src/data/get-metron-data', () => ({
-  getMetronData: vi.fn(),
+// Create a mock function for getMetronData
+const getMetronDataMock = mock(() => Promise.resolve({}))
+
+// Mock the module
+mock.module('../../src/data/get-metron-data', () => ({
+  getMetronData: getMetronDataMock,
 }))
 
+// Now import the mocked module
+import { getMetronData } from '../../src/data/get-metron-data'
+
 describe('getComics', () => {
+  let consoleErrorSpy: ReturnType<typeof spyOn>
+
   // Mock console.error to prevent error output during tests
   beforeAll(() => {
-    console.error = vi.fn()
+    consoleErrorSpy = spyOn(console, 'error').mockImplementation(() => {})
   })
 
   // Reset mocks before each test
   beforeEach(() => {
-    vi.resetAllMocks()
-  })
-
-  // Reset mocks after tests
-  afterEach(() => {
-    vi.restoreAllMocks()
+    getMetronDataMock.mockClear()
   })
 
   // Restore console after all tests
   afterAll(() => {
-    vi.restoreAllMocks()
+    consoleErrorSpy?.mockRestore()
   })
 
   it('has the correct function signature', () => {
@@ -57,7 +60,7 @@ describe('getComics', () => {
     }
 
     // Set up the mock return value
-    vi.mocked(getMetronData).mockResolvedValue(mockComicsData)
+    getMetronDataMock.mockResolvedValue(mockComicsData)
 
     // Call the function
     const result = await getComics(mockWeek)
@@ -74,7 +77,7 @@ describe('getComics', () => {
     const mockWeek = '2024-09-04'
 
     // Set up the mock to throw an error
-    vi.mocked(getMetronData).mockRejectedValue(new Error('API Error'))
+    getMetronDataMock.mockRejectedValue(new Error('API Error'))
 
     try {
       const _result = await getComics(mockWeek)
@@ -84,7 +87,7 @@ describe('getComics', () => {
       )
     } catch (error) {
       // If we catch an error here, verify it's the expected one
-      expect(error.message).toBe('API Error')
+      expect((error as Error).message).toBe('API Error')
     }
   })
 
@@ -92,7 +95,7 @@ describe('getComics', () => {
     const mockWeek = '2024-09-04'
 
     // Set up the mock to return an empty object
-    vi.mocked(getMetronData).mockResolvedValue({})
+    getMetronDataMock.mockResolvedValue({})
 
     // Call the function
     const result = await getComics(mockWeek)
@@ -104,7 +107,7 @@ describe('getComics', () => {
   it('handles invalid week parameter', async () => {
     // Since getMetronData handles errors internally and returns an empty object,
     // we can mock it to return an empty object
-    vi.mocked(getMetronData).mockResolvedValue({})
+    getMetronDataMock.mockResolvedValue({})
 
     // When we pass an invalid week parameter
     const result = await getComics('invalid-date')

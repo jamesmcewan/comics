@@ -1,15 +1,20 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, mock } from 'bun:test'
 import { getComicDetails } from '../../src/data/get-comic-details'
-import { getMetronData } from '../../src/data/get-metron-data'
 
-// Mock the getMetronData function
-vi.mock('../../src/data/get-metron-data', () => ({
-  getMetronData: vi.fn(),
+// Create a mock function for getMetronData
+const getMetronDataMock = mock(() => Promise.resolve({}))
+
+// Mock the module
+mock.module('../../src/data/get-metron-data', () => ({
+  getMetronData: getMetronDataMock,
 }))
+
+// Now import the mocked module
+import { getMetronData } from '../../src/data/get-metron-data'
 
 describe('getComicDetails', () => {
   beforeEach(() => {
-    vi.resetAllMocks()
+    getMetronDataMock.mockClear()
   })
 
   it('calls getMetronData with the correct endpoint', async () => {
@@ -22,7 +27,7 @@ describe('getComicDetails', () => {
     }
 
     // Set up the mock return value
-    vi.mocked(getMetronData).mockResolvedValue(mockComicData)
+    getMetronDataMock.mockResolvedValue(mockComicData)
 
     // Call the function
     const result = await getComicDetails(mockId)
@@ -39,7 +44,7 @@ describe('getComicDetails', () => {
     const mockId = '12345'
 
     // Set up the mock to throw an error
-    vi.mocked(getMetronData).mockRejectedValue(new Error('API Error'))
+    getMetronDataMock.mockRejectedValue(new Error('API Error'))
 
     // Since getComicDetails might have error handling, we should test the return value
     // rather than expecting it to throw
@@ -51,7 +56,7 @@ describe('getComicDetails', () => {
       )
     } catch (error) {
       // If we catch an error here, verify it's the expected one
-      expect(error.message).toBe('API Error')
+      expect((error as Error).message).toBe('API Error')
     }
   })
 
@@ -59,7 +64,7 @@ describe('getComicDetails', () => {
     const mockId = '12345'
 
     // Set up the mock to return an empty object
-    vi.mocked(getMetronData).mockResolvedValue({})
+    getMetronDataMock.mockResolvedValue({})
 
     // Call the function
     const result = await getComicDetails(mockId)

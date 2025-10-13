@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'bun:test'
 import { getNewComicBookDay } from '../../src/data/get-new-comic-book-day'
 
 describe('getNewComicBookDay', () => {
