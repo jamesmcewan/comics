@@ -1,0 +1,27 @@
+# See https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
+
+name: branches
+on:
+  push:
+    branches: ['!main']
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - name: Install
+        run: bun install
+
+      - name: format
+        run: bun run format:check
+
+      - name: lint
+        run: bun run lint:check
+
+      - name: test
+        run: bun test
+
+      - name: Build
+        run: bun run build

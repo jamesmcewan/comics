@@ -12,6 +12,7 @@ import { getMetronData } from '../../src/data/get-metron-data'
 describe('getMetronData', () => {
   let originalFetch: typeof globalThis.fetch
   let originalBtoa: typeof globalThis.btoa
+  let fetchMock: ReturnType<typeof mock>
 
   beforeEach(() => {
     // Set environment variables
@@ -22,9 +23,17 @@ describe('getMetronData', () => {
     originalBtoa = globalThis.btoa
     globalThis.btoa = (str: string) => `mocked_base64_${str}`
 
-    // Mock fetch
+    // Mock fetch - create mock and assign it
     originalFetch = globalThis.fetch
-    globalThis.fetch = mock()
+    fetchMock = mock(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        json: () => Promise.resolve({}),
+      } as Response),
+    )
+    globalThis.fetch = fetchMock as any
   })
 
   afterEach(() => {
@@ -40,7 +49,7 @@ describe('getMetronData', () => {
   it('makes a request with the correct authorization header', async () => {
     const mockJson = mock(() => Promise.resolve({ data: 'test data' }))
 
-    globalThis.fetch.mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
       statusText: 'OK',
@@ -50,7 +59,7 @@ describe('getMetronData', () => {
     const endpoint = 'https://api.example.com/comics'
     await getMetronData(endpoint)
 
-    expect(globalThis.fetch).toHaveBeenCalledWith(endpoint, {
+    expect(fetchMock).toHaveBeenCalledWith(endpoint, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +73,7 @@ describe('getMetronData', () => {
   it('returns the JSON response on successful request', async () => {
     const mockData = { data: 'test data' }
 
-    globalThis.fetch.mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
       statusText: 'OK',
@@ -76,7 +85,7 @@ describe('getMetronData', () => {
   })
 
   it('returns an empty object when the request fails', async () => {
-    globalThis.fetch.mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: false,
       status: 404,
       statusText: 'Not Found',
@@ -93,7 +102,7 @@ describe('getMetronData', () => {
   })
 
   it('handles network errors gracefully', async () => {
-    globalThis.fetch.mockRejectedValue(new Error('Network error'))
+    fetchMock.mockRejectedValue(new Error('Network error'))
 
     const consoleSpy = spyOn(console, 'error').mockImplementation(() => {})
 
